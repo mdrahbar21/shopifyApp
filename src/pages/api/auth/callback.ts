@@ -5,8 +5,9 @@ const tokenStorage: { [key: string]: { accessToken: string, createdAt: Date } } 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { code, state, shop } = req.query as { code: string, state: string, shop: string };
+    const savedState = sessionStorage.getItem('oauth_state');
 
-    if (state !== process.env.OAUTH_STATE_SECRET) {
+    if (state !== savedState) {
         return res.status(403).json({ error: 'Security check failed' });
     }
 
