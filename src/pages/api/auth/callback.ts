@@ -1,4 +1,3 @@
-// pages/api/auth/callback.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
 import axios from 'axios';
 import crypto from 'crypto';

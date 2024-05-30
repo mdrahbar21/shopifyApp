@@ -1,6 +1,7 @@
-// pages/installApp.tsx
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { cookies } from "next/headers";
+
 
 const InstallApp = () => {
     const router = useRouter();
@@ -25,6 +26,15 @@ const InstallApp = () => {
     const generateState = () => {
         const randomString = btoa(new Date().toISOString() + Math.random().toString()).substring(0, 12);
         sessionStorage.setItem('oauth_state', randomString);
+    
+        // Set the oauth_state as a cookie
+        cookies().set('oauth_state', randomString, {
+            httpOnly: true, // Makes the cookie inaccessible to client-side scripts
+            secure: true,   // Ensures the cookie is sent over HTTPS
+            path: '/',      // Specifies the path for which the cookie is valid
+            maxAge: 60 * 60 // Set the cookie expiration time in seconds (e.g., 1 hour)
+        });
+    
         return randomString;
     };
 
