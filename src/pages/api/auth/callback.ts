@@ -8,10 +8,15 @@ function verifyHmac(query: { [key: string]: string | string[] }, secret: string)
     const { hmac, ...params } = query;
     const message = Object.keys(params)
         .sort()
-        .map(key => `${key}=${Array.isArray(params[key]) ? params[key].join('') : params[key]}`)
+        .map(key => {
+            const value = params[key];
+            return `${key}=${Array.isArray(value) ? value.join('') : value}`;
+        })
         .join('&');
+    
     const hash = crypto.createHmac('sha256', secret).update(message).digest('hex');
     return crypto.timingSafeEqual(Buffer.from(hash), Buffer.from(hmac as string));
+
 }
 
 function isValidShopHostname(shop: string) {
