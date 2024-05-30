@@ -13,7 +13,7 @@ const InstallApp = () => {
     }, [shop]);
 
     const initiateOAuthFlow = (shop: string) => {
-        const clientId = process.env.CLIENT_ID;
+        const clientId = 'd4b88614e4678cf2a40338dcee13ee8b';
         const scopes = 'read_products,read_orders';
         const redirectUri = encodeURIComponent(`${window.location.origin}/api/auth/callback`);
         const state = generateState();
