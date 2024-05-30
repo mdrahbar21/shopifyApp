@@ -7,7 +7,7 @@ export default async function handler(req, res) {
 
   const { phoneNumber } = req.body; 
   const shopUrl = 'https://hoomanlab.myshopify.com';
-  const accessToken = process.env.CLIENT_ID;
+  const accessToken = "d4b88614e4678cf2a40338dcee13ee8b";
 
   try {
     // Fetch customers by phone number
