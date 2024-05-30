@@ -31,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(403).json({ error: 'Invalid state parameter' });
     }
 
-    if (!verifyHmac(req.query as { [key: string]: string | string[] }, process.env.CLIENT_SECRET as string)) {
+    if (!verifyHmac(req.query as { [key: string]: string | string[] }, "31f867947206a10d3cf80f5b6c3e1800")) {
         return res.status(400).json({ error: 'HMAC validation failed' });
     }
 
