@@ -1,11 +1,11 @@
 import axios from 'axios';
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).end('Method Not Allowed');
-  }
+//   if (req.method !== 'POST') {
+//     return res.status(405).end('Method Not Allowed');
+//   }
 
-  const { phoneNumber } = req.body; 
+  const { phoneNumber } = req.query; 
   const shopUrl = 'https://hoomanlab.myshopify.com';
   const accessToken = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN;
 
