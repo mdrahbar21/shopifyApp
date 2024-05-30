@@ -41,8 +41,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const accessTokenRequestUrl = `https://${shop}/admin/oauth/access_token`;
     const accessTokenPayload = {
-        client_id: 'd4b88614e4678cf2a40338dcee13ee8b',
-        client_secret: '4cd214935009a5c3e5eef3de9c97b570',
+        client_id: 'e6c5cfb86c34bd9b1f60d338d0662c34',
+        client_secret: '31f867947206a10d3cf80f5b6c3e1800',
         code
     };
 
