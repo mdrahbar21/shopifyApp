@@ -14,7 +14,7 @@ export default async function handler(req, res) {
   const { phoneNumber } = req.body; 
   const shop = 'hoomanlab.myshopify.com'
   const shopUrl = `https://${shop}`;
-  const accessToken = redis.get(`shopify:access_token:${shop}`);
+  const accessToken = await redis.get(`shopify:access_token:${shop}`);
 
   try {
     // Fetch customers by phone number
