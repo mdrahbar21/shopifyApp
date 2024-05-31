@@ -2,6 +2,8 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import axios from 'axios';
 import crypto from 'crypto';
 import base64 from 'base-64';
+import { Redis } from '@upstash/redis'
+
 
 function verifyHmac(query: { [key: string]: string | string[] }, secret: string) {
     const { hmac, ...params } = query;
@@ -31,8 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(403).json({ error: 'Invalid state parameter' });
     }
 
-    // if (!verifyHmac(req.query as { [key: string]: string | string[] }, process.env.CLIENT_SECRET as string)) {
-    if (!verifyHmac(req.query as { [key: string]: string | string[] }, "31f867947206a10d3cf80f5b6c3e1800")) {
+    if (!verifyHmac(req.query as { [key: string]: string | string[] }, process.env.SHOPIFY_APP_API_SECRET_KEY as string)) {
         return res.status(400).json({ error: 'HMAC validation failed' });
     }
 
@@ -42,14 +43,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const accessTokenRequestUrl = `https://${shop}/admin/oauth/access_token`;
     const accessTokenPayload = {
-        client_id: 'e6c5cfb86c34bd9b1f60d338d0662c34',
-        client_secret: '31f867947206a10d3cf80f5b6c3e1800',
+        client_id: process.env.NEXT_PUBLIC_SHOPIFY_APP_API_KEY,
+        client_secret: process.env.SHOPIFY_APP_API_SECRET_KEY,
         code
     };
+    const redis = new Redis({
+        url: 'https://cheerful-dolphin-53244.upstash.io',
+        token: process.env.REDIS_TOKEN,
+      })
 
     try {
         const response = await axios.post(accessTokenRequestUrl, accessTokenPayload);
-        const { access_token, scope } = response.data;
+        const { access_token} = response.data;
+        await redis.set(`shopify:access_token:${shop}`, access_token);
+        
         const decodedHost = base64.decode(host.replace(/\s/g, '+'));
         // Directly redirect without checking if embedded
         res.redirect(`/?shop=${shop}&host=${encodeURIComponent(decodedHost)}`);
