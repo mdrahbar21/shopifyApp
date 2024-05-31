@@ -1,13 +1,20 @@
 import axios from 'axios';
+import {Redis} from '@upstash/redis'
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).end('Method Not Allowed');
   }
 
+  const redis = new Redis({
+    url: 'https://cheerful-dolphin-53244.upstash.io',
+    token: process.env.REDIS_TOKEN,
+  })
+
   const { phoneNumber } = req.body; 
-  const shopUrl = 'https://hoomanlab.myshopify.com';
-  const accessToken = "d4b88614e4678cf2a40338dcee13ee8b";
+  const shop = 'hoomanlab.myshopify.com'
+  const shopUrl = `https://${shop}`;
+  const accessToken = redis.get(`shopify:access_token:${shop}`);
 
   try {
     // Fetch customers by phone number
